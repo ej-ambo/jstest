@@ -74,6 +74,38 @@
           url: "https://services.arcgis.com/wlVTGRSYTzAbjjiC/arcgis/rest/services/ZENKOKU_PREF_view/FeatureServer",
           outFields: ["*"]
       });
+        // 色変更VisualVariables要素を追加
+        const renderer = {
+        type: "simple",
+        symbol: {
+          type: "simple-fill",
+          style:"solid",
+          color: [250, 250, 250],
+          outline: {
+            color: [0, 0, 0, 0.9],
+            width: 0.5,
+          },
+        },
+
+        visualVariables: [
+          {
+            type: "color",
+            field: "JCODE",
+            stops: [
+              { value: 1, color: "#2b83ba" },
+              { value: 10, color: "#abdda4" },
+              { value: 20, color: "#ffffbf" },
+              { value: 30, color: "#fdae61" },
+              { value: 47, color: "#d7191c" },
+            ],
+          },
+        ],
+
+      };
+      
+      layer.renderer = renderer;
+      // 色変更終了
+      
       // arcgis-map 要素の準備を待つ
       await arcgisMap.componentOnReady();
       
