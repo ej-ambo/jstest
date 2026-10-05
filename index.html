@@ -74,36 +74,104 @@
           url: "https://services.arcgis.com/wlVTGRSYTzAbjjiC/arcgis/rest/services/ZENKOKU_PREF_view/FeatureServer",
           outFields: ["*"]
       });
-        // 色変更VisualVariables要素を追加
-        const renderer = {
-        type: "simple",
-        symbol: {
-          type: "simple-fill",
-          style:"solid",
-          color: [250, 250, 250],
+      // ここからシンボル変更
+      // ClassBreaksRenderer
+      // 各階級に使うシンボルを定義
+       const less300000 = {
+        type: "simple-fill", 
+        color: "#eff3ff",
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0.5],
+        },
+      };
+      const less500000 = {
+        type: "simple-fill", 
+        color: "#bdd7e7",
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0.5],
+        },
+      };
+      const less800000 = {
+        type: "simple-fill", 
+        color: "#6baed6",
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0.5],
+        },
+      };
+      const less1300000 = {
+        type: "simple-fill", 
+        color: "#2171b5",
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0.5],
+        },
+      };
+      const more1300000 = {
+        type: "simple-fill",
+        color: "#084594",
+        style: "solid",
+        outline: {
+          width: 0.5,
+          color: [255, 255, 255, 0.5],
+        },
+      };
+
+      const renderer = {
+        type: "class-breaks", 
+        field: "H_NUM", 
+        defaultSymbol: {
+          type: "simple-fill", 
+          color: "black",
+          style: "backward-diagonal",
           outline: {
-            color: [0, 0, 0, 0.9],
             width: 0.5,
+            color: [50, 50, 50, 0.5],
           },
         },
-
-        visualVariables: [
+        defaultLabel: "no data",
+        classBreakInfos: [
           {
-            type: "color",
-            field: "JCODE",
-            stops: [
-              { value: 1, color: "#2b83ba" },
-              { value: 10, color: "#abdda4" },
-              { value: 20, color: "#ffffbf" },
-              { value: 30, color: "#fdae61" },
-              { value: 47, color: "#d7191c" },
-            ],
+            minValue: 0,
+            maxValue: 300000,
+            symbol: less300000,
+            label: "30万世帯未満",
           },
+          {
+            minValue: 300000,
+            maxValue: 500000,
+            symbol: less500000,
+            label: "30万世帯～50万世帯",
+          },
+          {
+            minValue: 500000,
+            maxValue: 800000,
+            symbol: less800000,
+            label: "50万世帯～80万世帯"
+          },
+          {
+            minValue: 800000,
+            maxValue: 1200000,
+            symbol: less1300000,
+            label: "80万世帯～120万世帯"
+          },
+          {
+            minValue: 1200000,
+            maxValue: 19000000,
+            symbol: more1300000,
+            label: "120万世帯～190万世帯"
+          }
         ],
-
       };
+        // レンダラーを適用
+        layer.renderer = renderer;
       
-      layer.renderer = renderer;
       // 色変更終了
       
       // arcgis-map 要素の準備を待つ
